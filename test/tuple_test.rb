@@ -82,4 +82,34 @@ class TestTuple < Minitest::Test
     assert_equal v1.cross(v2), Vector(-1, 2, -1)
     assert_equal v2.cross(v1), Vector(1, -2, 1)
   end
+
+  def test_colour_tuple
+    c = Colour(-0.5, 0.4, 1.7)
+    assert_equal c.red, -0.5
+    assert_equal c.green, 0.4
+    assert_equal c.blue, 1.7
+  end
+
+  def test_colour_addition
+    c1 = Colour(0.9, 0.6, 0.75)
+    c2 = Colour(0.7, 0.1, 0.25)
+    assert_equal c1 + c2, Colour(1.6, 0.7, 1.0)
+  end
+
+  def test_colour_subtraction
+    c1 = Colour(0.9, 0.6, 0.75)
+    c2 = Colour(0.7, 0.1, 0.25)
+    assert_equal c1 - c2, Colour(0.2, 0.5, 0.5)
+  end
+
+  def test_colour_multiplication_by_a_scalar
+    c = Colour(0.2, 0.3, 0.4)
+    assert_equal c * 2, Colour(0.4, 0.6, 0.8)
+  end
+
+  def test_colour_multiplication
+    c1 = Colour(1, 0.2, 0.4)
+    c2 = Colour(0.9, 1, 0.1)
+    assert_equal c1 * c2, Colour(0.9, 0.2, 0.04)
+  end
 end

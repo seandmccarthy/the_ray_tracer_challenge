@@ -87,3 +87,28 @@ class Vector < Tuple
     super(x, y, z, 0)
   end
 end
+
+def Colour(*args)
+  Colour.new(*args)
+end
+
+class Colour < Tuple
+  def initialize(red, green, blue)
+    super(red, green, blue, 0)
+  end
+  alias red x
+  alias green y
+  alias blue z
+
+  def hadamard_product(other)
+    Colour(red * other.red, green * other.green, blue * other.blue)
+  end
+
+  def *(other)
+    if other.is_a? Colour
+      hadamard_product(other)
+    else
+      super
+    end
+  end
+end

@@ -157,4 +157,42 @@ class TestMatrices < Minitest::Test
     assert_equal b.determinant, 25
     assert_equal a.minor(1, 0), 25
   end
+
+  def test_cofactor_3x3
+    a = Matrix(
+      [3, 5, 0],
+      [2, -1, -7],
+      [6, -1, 5]
+    )
+    assert_equal a.minor(0, 0), -12
+    assert_equal a.cofactor(0, 0), -12
+    assert_equal a.minor(1, 0), 25
+    assert_equal a.cofactor(1, 0), -25
+  end
+
+  def test_determinant_of_3x3
+    a = Matrix(
+      [1, 2, 6],
+      [-5, 8, -4],
+      [2, 6, 4]
+    )
+    assert_equal a.cofactor(0, 0), 56
+    assert_equal a.cofactor(0, 1), 12
+    assert_equal a.cofactor(0, 2), -46
+    assert_equal a.determinant, -196
+  end
+
+  def test_determinant_of_4x4
+    a = Matrix(
+      [-2, -8, 3, 5],
+      [-3, 1, 7, 3],
+      [1, 2, -9, 6],
+      [-6, 7, 7, -9]
+    )
+    assert_equal a.cofactor(0, 0), 690
+    assert_equal a.cofactor(0, 1), 447
+    assert_equal a.cofactor(0, 2), 210
+    assert_equal a.cofactor(0, 3), 51
+    assert_equal a.determinant, -4071
+  end
 end

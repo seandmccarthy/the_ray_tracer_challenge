@@ -55,7 +55,10 @@ class Matrix
   end
 
   def determinant
-    self[0, 0] * self[1, 1] - self[0, 1] * self[1, 0]
+    return determinant_2x2 if row_size == 2
+    column_size.times.reduce(0) do |sum, n|
+      sum + cofactor(0, n) * self[0, n]
+    end
   end
 
   def submatrix(row, col)
@@ -70,6 +73,15 @@ class Matrix
     submatrix(row, col).determinant
   end
 
+  def cofactor(row, col)
+    result = minor(row, col)
+    if (row + col).even?
+      result
+    else
+      -result
+    end
+  end
+
   private
 
   def multiply(row_index, column_index, other)
@@ -81,6 +93,10 @@ class Matrix
   def tuple_multiply(tuple)
     m = Matrix([tuple.x], [tuple.y], [tuple.z], [tuple.w])
     Tuple(*(self * m).columns.first)
+  end
+
+  def determinant_2x2
+    self[0, 0] * self[1, 1] - self[0, 1] * self[1, 0]
   end
 end
 

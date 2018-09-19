@@ -24,7 +24,7 @@ class Matrix
   end
 
   def column_size
-    @rows.first.size
+    @column_size ||= @rows.first.size
   end
 
   def [](row, col)
@@ -79,6 +79,25 @@ class Matrix
       result
     else
       -result
+    end
+  end
+
+  def invertible?
+    determinant != 0
+  end
+
+  def inverse
+    inv_matrix = Matrix.empty(row_size, column_size, 0)
+    row_size.times do |x|
+      column_size.times do |y|
+        inv_matrix[x, y] = cofactor(x, y)
+      end
+    end
+    det = determinant.to_f
+    inv_matrix.transpose.tap do |m|
+      m.rows.each do |row|
+        row.map! { |i| (i / det).round(5) }
+      end
     end
   end
 

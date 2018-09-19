@@ -195,4 +195,81 @@ class TestMatrices < Minitest::Test
     assert_equal a.cofactor(0, 3), 51
     assert_equal a.determinant, -4071
   end
+
+  def test_invertible
+    a = Matrix(
+      [6, 4, 4, 4],
+      [5, 5, 7, 6],
+      [4, -9, 3, -7],
+      [9, 1, 7, -6]
+    )
+    assert_equal a.determinant, -2120
+    assert a.invertible?
+  end
+
+  def test_not_invertible
+    a = Matrix(
+      [-4, 2, -2, -3],
+      [9, 6, 2, 6],
+      [0, -5, 1, -5],
+      [0, 0, 0, 0]
+    )
+    assert_equal a.determinant, 0
+    assert !a.invertible?
+  end
+
+  def test_inverse_matrix
+    a = Matrix(
+      [-5, 2, 6, -8],
+      [1, -5, 1,  8],
+      [7, 7, -6, -7],
+      [1, -3, 7, 4]
+    )
+    b = a.inverse
+    assert_equal a.determinant, 532
+    assert_equal a.cofactor(2, 3), -160
+    assert_equal b[3, 2], (-160 / 532.to_f).round(5)
+    assert_equal a.cofactor(3, 2), 105
+    assert_equal b[2, 3], (105 / 532.to_f).round(5)
+    assert_equal b, Matrix(
+      [0.21805,  0.45113,  0.24060, -0.04511],
+      [-0.80827, -1.45677, -0.44361,  0.52068],
+      [-0.07895, -0.22368, -0.05263,  0.19737],
+      [-0.52256, -0.81391, -0.30075,  0.30639]
+    )
+  end
+
+  def test_inverse_matrix_again
+    a = Matrix(
+      [9, 3, 0, 9],
+      [-5, -2, -6, -3],
+      [-4, 9, 6, 4],
+      [-7, 6, 6, 2]
+    )
+    assert_equal a.inverse, Matrix(
+      [-0.04074, -0.07778, 0.14444, -0.22222],
+      [-0.07778, 0.03333, 0.36667, -0.33333],
+      [-0.02901, -0.14630, -0.10926, 0.12963],
+      [0.17778, 0.06667, -0.26667, 0.33333]
+    )
+  end
+
+  def test_multiplying_a_product_by_its_inverse
+    a = Matrix(
+      [3, -9, 7, 3],
+      [3, -8, 2, -9],
+      [-4, 4, 4, 1],
+      [-6, 5, -1, 1]
+    )
+    b = Matrix(
+      [8, 2, 2, 2],
+      [3, -1, 7, 0],
+      [7, 0, 5, 4],
+      [6, -2, 0, 5]
+    )
+    c = a * b
+    c_b_inv = c * b.inverse
+    c_b_inv.rows.each { |row| row.map! { |i| i.round(0) } }
+    assert_equal c_b_inv, a
+  end
 end

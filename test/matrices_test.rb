@@ -84,4 +84,77 @@ class TestMatrices < Minitest::Test
     t = Tuple(1, 2, 3, 1)
     assert_equal m * t, Tuple(18, 24, 33, 1)
   end
+
+  def test_create_identity_matrix
+    identity = Matrix.identity(3)
+    assert_equal identity, Matrix(
+      [1, 0, 0],
+      [0, 1, 0],
+      [0, 0, 1]
+    )
+  end
+
+  def test_transpose
+    m = Matrix(
+      [0, 6, 3, 0],
+      [9, 8, 0, 8],
+      [1, 8, 5, 3],
+      [0, 0, 5, 8]
+    )
+    assert_equal m.transpose, Matrix(
+      [0, 9, 1, 0],
+      [6, 8, 8, 0],
+      [3, 0, 5, 5],
+      [0, 8, 3, 8]
+    )
+  end
+
+  def test_transposing_identity_is_identity
+    assert_equal Matrix.identity(2).transpose, Matrix.identity(2)
+  end
+
+  def test_determinant_of_2x2
+    m = Matrix(
+      [1, 5],
+      [-3, 2]
+    )
+    assert_equal m.determinant, 17
+  end
+
+  def test_submatrix_of_3x3
+    m = Matrix(
+      [1, 5, 0],
+      [-3, 2, 7],
+      [0, 6, -3]
+    )
+    assert_equal m.submatrix(0, 2), Matrix(
+      [-3, 2],
+      [0, 6]
+    )
+  end
+
+  def test_submatrix_of_4x4
+    m = Matrix(
+      [-6, 1, 1, 6],
+      [-8, 5, 8, 6],
+      [-1, 0, 8, 2],
+      [-7, 1, -1, 1]
+    )
+    assert_equal m.submatrix(2, 1), Matrix(
+      [-6, 1, 6],
+      [-8, 8, 6],
+      [-7, -1, 1]
+    )
+  end
+
+  def test_minor_of_3x3
+    a = Matrix(
+      [3, 5, 0],
+      [2, -1, -7],
+      [6, -1, 5]
+    )
+    b = a.submatrix(1, 0)
+    assert_equal b.determinant, 25
+    assert_equal a.minor(1, 0), 25
+  end
 end

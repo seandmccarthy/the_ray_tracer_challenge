@@ -13,3 +13,30 @@ def Scaling(x, y, z)
     m[2, 2] = z
   end
 end
+
+def rotation_x(rad)
+  Matrix(
+    [1, 0, 0, 0],
+    [0, Math.cos(rad), -Math.sin(rad), 0],
+    [0, Math.sin(rad), Math.cos(rad), 0],
+    [0, 0, 0, 1]
+  )
+end
+
+def rotation_y(rad)
+  Matrix(
+    [Math.cos(rad), 0, Math.sin(rad), 0],
+    [0, 1, 0, 0],
+    [-Math.sin(rad), 0, Math.cos(rad), 0],
+    [0, 0, 0, 1]
+  )
+end
+
+def rotation_z(rad)
+  Matrix(
+    [Math.cos(rad), -Math.sin(rad), 0, 0],
+    [Math.sin(rad), Math.cos(rad), 0, 0],
+    [0, 0, 1, 0],
+    [0, 0, 0, 1]
+  )
+end

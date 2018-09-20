@@ -50,4 +50,39 @@ class TestTransformations < Minitest::Test
     p = Point(2, 3, 4)
     assert_equal transform * p, Point(-2, 3, 4)
   end
+
+  def test_rotating_a_point_around_the_x_axis
+    p = Point(0, 1, 0)
+    half_quarter = rotation_x(Math::PI / 4)
+    full_quarter = rotation_x(Math::PI / 2)
+    assert_equal half_quarter * p,
+                 Point(0, Math.sqrt(2) / 2.0, Math.sqrt(2) / 2.0)
+    assert_equal full_quarter * p, Point(0, 0, 1)
+  end
+
+  def test_inverse_of_x_rotation
+    p = Point(0, 1, 0)
+    half_quarter = rotation_x(Math::PI / 4)
+    inv = half_quarter.inverse
+    assert_equal inv * p,
+                 Point(0, Math.sqrt(2) / 2.0, -Math.sqrt(2) / 2.0)
+  end
+
+  def test_rotating_a_point_around_the_y_axis
+    p = Point(0, 0, 1)
+    half_quarter = rotation_y(Math::PI / 4)
+    full_quarter = rotation_y(Math::PI / 2)
+    assert_equal half_quarter * p,
+                 Point(Math.sqrt(2) / 2.0, 0, Math.sqrt(2) / 2.0)
+    assert_equal full_quarter * p, Point(1, 0, 0)
+  end
+
+  def test_rotating_a_point_around_the_z_axis
+    p = Point(0, 1, 0)
+    half_quarter = rotation_z(Math::PI / 4)
+    full_quarter = rotation_z(Math::PI / 2)
+    assert_equal half_quarter * p,
+                 Point(-Math.sqrt(2) / 2.0, Math.sqrt(2) / 2.0, 0)
+    assert_equal full_quarter * p, Point(-1, 0, 0)
+  end
 end

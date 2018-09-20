@@ -4,38 +4,38 @@ require_relative '../lib/transformation'
 
 class TestTransformations < Minitest::Test
   def test_multiplying_by_translation_matrix
-    transform = Translation(5, -3, 2)
+    transform = translation(5, -3, 2)
     p = Point(-3, 4, 5)
     assert_equal transform * p, Point(2, 1, 7)
   end
 
   def test_mutiplying_by_inverse_of_translation_matrix
-    transform = Translation(5, -3, 2)
+    transform = translation(5, -3, 2)
     inv = transform.inverse
     p = Point(-3, 4, 5)
     assert_equal inv * p, Point(-8, 7, 3)
   end
 
   def test_translation_does_not_change_vectors
-    transform = Translation(5, -3, 2)
+    transform = translation(5, -3, 2)
     v = Vector(-3, 4, 5)
     assert_equal transform * v, v
   end
 
   def test_scaling_a_point
-    transform = Scaling(2, 3, 4)
+    transform = scaling(2, 3, 4)
     p = Point(-4, 6, 8)
     assert_equal transform * p, Point(-8, 18, 32)
   end
 
   def test_scaling_a_vector
-    transform = Scaling(2, 3, 4)
+    transform = scaling(2, 3, 4)
     v = Vector(-4, 6, 8)
     assert_equal transform * v, Vector(-8, 18, 32)
   end
 
   def test_multiply_by_inverse_of_scaling_matrix
-    transform = Scaling(2, 3, 4)
+    transform = scaling(2, 3, 4)
     inv = transform.inverse
     v = Vector(-4, 6, 8)
     v_inverse = inv * v
@@ -46,7 +46,7 @@ class TestTransformations < Minitest::Test
   end
 
   def test_reflection_by_scaling_with_negative
-    transform = Scaling(-1, 1, 1)
+    transform = scaling(-1, 1, 1)
     p = Point(2, 3, 4)
     assert_equal transform * p, Point(-2, 3, 4)
   end
@@ -84,5 +84,63 @@ class TestTransformations < Minitest::Test
     assert_equal half_quarter * p,
                  Point(-Math.sqrt(2) / 2.0, Math.sqrt(2) / 2.0, 0)
     assert_equal full_quarter * p, Point(-1, 0, 0)
+  end
+
+  def test_shearing_moves_x_in_proportion_to_y
+    transform = shearing(1, 0, 0, 0, 0, 0)
+    p = Point(2, 3, 4)
+    assert_equal transform * p, Point(5, 3, 4)
+  end
+
+  def test_shearing_moves_x_in_proportion_to_z
+    transform = shearing(0, 1, 0, 0, 0, 0)
+    p = Point(2, 3, 4)
+    assert_equal transform * p, Point(6, 3, 4)
+  end
+
+  def test_shearing_moves_y_in_proportion_to_x
+    transform = shearing(0, 0, 1, 0, 0, 0)
+    p = Point(2, 3, 4)
+    assert_equal transform * p, Point(2, 5, 4)
+  end
+
+  def test_shearing_moves_y_in_proportion_to_z
+    transform = shearing(0, 0, 0, 1, 0, 0)
+    p = Point(2, 3, 4)
+    assert_equal transform * p, Point(2, 7, 4)
+  end
+
+  def test_shearing_moves_z_in_proportion_to_x
+    transform = shearing(0, 0, 0, 0, 1, 0)
+    p = Point(2, 3, 4)
+    assert_equal transform * p, Point(2, 3, 6)
+  end
+
+  def test_shearing_moves_z_in_proportion_to_y
+    transform = shearing(0, 0, 0, 0, 0, 1)
+    p = Point(2, 3, 4)
+    assert_equal transform * p, Point(2, 3, 7)
+  end
+
+  def test_individual_transformations_applied_in_sequence
+    p = Point(1, 0, 1)
+    a = rotation_x(Math::PI / 2.0)
+    b = scaling(5, 5, 5)
+    c = translation(10, 5, 7)
+    p2 = a * p
+    assert_equal a * p, Point(1, -1, 0)
+    p3 = b * p2
+    assert_equal p3, Point(5, -5, 0)
+    p4 = c * p3
+    assert_equal p4, Point(15, 0, 7)
+  end
+
+  def test_chained_transformations_must_be_applied_in_reverse_order
+    p = Point(1, 0, 1)
+    a = rotation_x(Math::PI / 2.0)
+    b = scaling(5, 5, 5)
+    c = translation(10, 5, 7)
+    t = c * b * a
+    assert_equal t * p, Point(15, 0, 7)
   end
 end

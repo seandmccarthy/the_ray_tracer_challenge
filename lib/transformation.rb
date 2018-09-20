@@ -1,4 +1,4 @@
-def Translation(x, y, z)
+def translation(x, y, z)
   Matrix.identity(4).tap do |m|
     m[0, 3] = x
     m[1, 3] = y
@@ -6,7 +6,7 @@ def Translation(x, y, z)
   end
 end
 
-def Scaling(x, y, z)
+def scaling(x, y, z)
   Matrix.identity(4).tap do |m|
     m[0, 0] = x
     m[1, 1] = y
@@ -37,6 +37,15 @@ def rotation_z(rad)
     [Math.cos(rad), -Math.sin(rad), 0, 0],
     [Math.sin(rad), Math.cos(rad), 0, 0],
     [0, 0, 1, 0],
+    [0, 0, 0, 1]
+  )
+end
+
+def shearing(xy, xz, yx, yz, zx, zy)
+  Matrix(
+    [1, xy, xz, 0],
+    [yx, 1, yz, 0],
+    [zx, zy, 1, 0],
     [0, 0, 0, 1]
   )
 end

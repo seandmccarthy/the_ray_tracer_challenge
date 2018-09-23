@@ -1,6 +1,12 @@
 class Sphere
+  attr_accessor :transform
+
+  def initialize
+    @transform = Matrix.identity(4)
+  end
+
   def intersect(ray)
-    a, b, c = coefficents(ray)
+    a, b, c = coefficents(ray.transform(@transform.inverse))
     build_intersections quadratic_roots(a, b, c)
   end
 

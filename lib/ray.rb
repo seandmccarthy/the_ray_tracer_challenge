@@ -9,6 +9,10 @@ class Ray
   def position(t)
     origin + direction * t
   end
+
+  def transform(matrix)
+    Ray(matrix * @origin, matrix * @direction)
+  end
 end
 
 def Ray(origin, direction)

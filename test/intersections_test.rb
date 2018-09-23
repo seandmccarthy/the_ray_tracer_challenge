@@ -18,4 +18,38 @@ class TestIntersections < Minitest::Test
     assert_equal xs[0].t, 1
     assert_equal xs[1].t, 2
   end
+
+  def test_hit_when_all_intersections_have_positive_t
+    s = Sphere()
+    i1 = Intersection(1, s)
+    i2 = Intersection(2, s)
+    xs = Intersections(i1, i2)
+    assert_equal xs.hit, i1
+  end
+
+  def test_hit_when_some_intersections_have_negative_t
+    s = Sphere()
+    i1 = Intersection(-1, s)
+    i2 = Intersection(1, s)
+    xs = Intersections(i1, i2)
+    assert_equal xs.hit, i2
+  end
+
+  def test_hit_when_all_intersections_have_negative_t
+    s = Sphere()
+    i1 = Intersection(-2, s)
+    i2 = Intersection(-1, s)
+    xs = Intersections(i1, i2)
+    assert_nil xs.hit
+  end
+
+  def test_the_hit_is_the_lowest_non_negative_intersection
+    s = Sphere()
+    i1 = Intersection(5, s)
+    i2 = Intersection(7, s)
+    i3 = Intersection(-3, s)
+    i4 = Intersection(2, s)
+    xs = Intersections(i1, i2, i3, i4)
+    assert_equal xs.hit, i4
+  end
 end

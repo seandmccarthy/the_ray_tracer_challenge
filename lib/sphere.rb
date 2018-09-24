@@ -10,10 +10,22 @@ class Sphere
     build_intersections quadratic_roots(a, b, c)
   end
 
+  def normal_at(world_point)
+    object_point = transform.inverse * world_point
+    object_normal = object_point - origin
+    world_normal = transform.inverse.transpose * object_normal
+    world_normal.w = 0
+    world_normal.normalise
+  end
+
   private
 
+  def origin
+    @origin ||= Point(0, 0, 0)
+  end
+
   def coefficents(ray)
-    sphere_to_ray = ray.origin - Point(0, 0, 0)
+    sphere_to_ray = ray.origin - origin
     a = ray.direction.dot(ray.direction)
     b = 2 * ray.direction.dot(sphere_to_ray)
     c = sphere_to_ray.dot(sphere_to_ray) - 1

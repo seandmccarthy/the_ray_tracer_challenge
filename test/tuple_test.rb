@@ -112,4 +112,16 @@ class TestTuple < Minitest::Test
     c2 = Colour(0.9, 1, 0.1)
     assert_equal c1 * c2, Colour(0.9, 0.2, 0.04)
   end
+
+  def test_reflecting_a_vector_at_45_degrees
+    v = Vector(1, -1, 0)
+    n = Vector(0, 1, 0)
+    assert_equal v.reflect(n), Vector(1, 1, 0)
+  end
+
+  def test_reflecting_a_vector_of_a_slanted_surface
+    v = Vector(0, -1, 0)
+    n = Vector(Math.sqrt(2) / 2, Math.sqrt(2) / 2, 0)
+    assert_equal v.reflect(n), Vector(1, 0, 0)
+  end
 end

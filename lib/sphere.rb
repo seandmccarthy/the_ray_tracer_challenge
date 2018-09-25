@@ -1,7 +1,8 @@
 class Sphere
-  attr_accessor :transform
+  attr_accessor :transform, :material
 
-  def initialize
+  def initialize(material: Material.new)
+    @material = material
     @transform = Matrix.identity(4)
   end
 

@@ -128,4 +128,16 @@ class TestSpheres < Minitest::Test
     n = s.normal_at(Point(0, 2 / Math.sqrt(2), -2 / Math.sqrt(2)))
     assert_equal n, Vector(0, 0.97014, -0.24254)
   end
+
+  def test_a_sphere_has_a_default_material
+    s = Sphere()
+    assert_kind_of Material, s.material
+  end
+
+  def test_a_sphere_can_be_assigned_a_material
+    s = Sphere()
+    m = Material.new(ambient: 1)
+    s.material = m
+    assert_equal s.material.ambient, m.ambient
+  end
 end

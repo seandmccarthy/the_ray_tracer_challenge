@@ -1,9 +1,9 @@
 class Sphere
   attr_accessor :transform, :material
 
-  def initialize(material: Material.new)
+  def initialize(material: Material.new, transform: Matrix.identity(4))
     @material = material
-    @transform = Matrix.identity(4)
+    @transform = transform
   end
 
   def intersect(ray)

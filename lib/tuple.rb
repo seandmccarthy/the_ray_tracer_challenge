@@ -98,7 +98,7 @@ end
 
 class Colour < Tuple
   def initialize(red, green, blue)
-    super(red, green, blue, 0)
+    super(red.round(EPSILON), green.round(EPSILON), blue.round(EPSILON), 0)
   end
   alias red x
   alias green y

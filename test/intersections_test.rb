@@ -52,4 +52,33 @@ class TestIntersections < Minitest::Test
     xs = Intersections(i1, i2, i3, i4)
     assert_equal xs.hit, i4
   end
+
+  def test_precomputing_the_state_of_an_intersection
+    ray = Ray(Point(0, 0, -5), Vector(0, 0, 1))
+    shape = Sphere()
+    hit = Intersection(4, shape)
+    hit.prepare_hit(ray)
+    assert_equal hit.point, Point(0, 0, -1)
+    assert_equal hit.eye_vector, Vector(0, 0, -1)
+    assert_equal hit.normal_vector, Vector(0, 0, -1)
+  end
+
+  def test_an_intersection_occurs_on_the_outside
+    ray = Ray(Point(0, 0, -5), Vector(0, 0, 1))
+    shape = Sphere()
+    hit = Intersection(4, shape)
+    hit.prepare_hit(ray)
+    assert !hit.inside
+  end
+
+  def test_an_intersection_occurs_on_the_inside
+    ray = Ray(Point(0, 0, 0), Vector(0, 0, 1))
+    shape = Sphere()
+    hit = Intersection(1, shape)
+    hit.prepare_hit(ray)
+    assert_equal hit.point, Point(0, 0, 1)
+    assert_equal hit.eye_vector, Vector(0, 0, -1)
+    assert_equal hit.normal_vector, Vector(0, 0, -1)
+    assert hit.inside
+  end
 end

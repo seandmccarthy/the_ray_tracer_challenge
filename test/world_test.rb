@@ -53,8 +53,16 @@ class TestWorld < Minitest::Test
   end
 
   def test_the_colour_when_a_ray_misses
+    world = default_world
+    ray = Ray(Point(0, 0, -5), Vector(0, 1, 0))
+    c = world.colour_at(ray)
+    assert_equal c, Colour(0, 0, 0)
   end
 
   def test_the_colour_when_a_ray_hits
+    world = default_world
+    ray = Ray(Point(0, 0, -5), Vector(0, 0, 1))
+    c = world.colour_at(ray)
+    assert_equal c, Colour(0.38066, 0.47582, 0.28549)
   end
 end

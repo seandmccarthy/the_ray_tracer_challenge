@@ -15,6 +15,13 @@ class World
       light_source, hit.point, hit.eye_vector, hit.normal_vector
     )
   end
+
+  def colour_at(ray)
+    hit = intersect(ray).hit
+    return Colour(0, 0, 0) if hit.nil?
+    hit.prepare_hit(ray)
+    shade_hit(hit)
+  end
 end
 
 def World(objects: [], light_source: nil)

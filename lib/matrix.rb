@@ -5,10 +5,24 @@ class Matrix
     Matrix(*Array.new(rows) { Array.new(columns, value) })
   end
 
-  def self.identity(size)
+  def self.identity(size = 4)
     empty(size, size, 0).tap do |m|
       size.times { |i| m[i, i] = 1 }
     end
+  end
+
+  def self.view_transform(from:, to:, up:)
+    forward = (to - from).normalise
+    up_normal = up.normalise
+    left = forward.cross(up_normal)
+    true_up = left.cross(forward)
+    orientation = Matrix(
+      [left.x,     left.y,     left.z,     0],
+      [true_up.x,  true_up.y,  true_up.z,  0],
+      [-forward.x, -forward.y, -forward.z, 0],
+      [0,          0,          0,          1]
+    )
+    orientation * translation(-from.x, -from.y, -from.z)
   end
 
   def initialize(*rows)
@@ -37,6 +51,15 @@ class Matrix
 
   def ==(other)
     rows == other.rows
+  end
+
+  def approx_equal(other)
+    (0..row_size-1).each do |row|
+      (0..column_size-1).each do |col|
+        return false unless in_delta(self[row, col], other[row, col])
+      end
+    end
+    true
   end
 
   def *(other)
@@ -102,6 +125,10 @@ class Matrix
   end
 
   private
+
+  def in_delta(a, b, delta = 0.001)
+    (a - b).abs <= delta
+  end
 
   def multiply(row_index, column_index, other)
     row_size.times.reduce(0) do |sum, n|

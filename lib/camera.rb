@@ -22,6 +22,18 @@ class Camera
     Ray(origin, direction)
   end
 
+  def render(world)
+    Canvas(@hsize, @vsize).tap do |image|
+      (0..@vsize-1).each do |y|
+        (0..@hsize-1).each do |x|
+          ray = ray_for_pixel(x, y)
+          colour = world.colour_at(ray)
+          image.write_pixel(x, y, colour)
+        end
+      end
+    end
+  end
+
   private
 
   def calculate_sizes

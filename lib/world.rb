@@ -12,7 +12,11 @@ class World
 
   def shade_hit(hit)
     hit.object.material.lighting(
-      light_source, hit.point, hit.eye_vector, hit.normal_vector
+      light: light_source,
+      point: hit.point,
+      eye_vector: hit.eye_vector,
+      normal_vector: hit.normal_vector,
+      in_shadow: shadowed?(hit.point)
     )
   end
 
@@ -21,6 +25,15 @@ class World
     return Colour(0, 0, 0) if hit.nil?
     hit.prepare_hit(ray)
     shade_hit(hit)
+  end
+
+  def shadowed?(point)
+    v = light_source.position - point
+    distance = v.magnitude
+    direction = v.normalise
+    ray = Ray(point, direction)
+    hit = intersect(ray).hit
+    !hit.nil? && hit.t < distance
   end
 end
 

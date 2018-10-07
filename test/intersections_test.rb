@@ -81,4 +81,13 @@ class TestIntersections < Minitest::Test
     assert_equal hit.normal_vector, Vector(0, 0, -1)
     assert hit.inside
   end
+
+  def test_the_point_is_an_offset
+    ray = Ray(Point(0, 0, -5), Vector(0, 0, 1))
+    shape = Sphere()
+    hit = Intersection(4, shape)
+    hit.prepare_hit(ray)
+    assert hit.point.z > -1.1
+    assert hit.point.z < -1
+  end
 end

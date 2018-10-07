@@ -9,9 +9,10 @@ require_relative '../lib/intersection'
 require_relative '../lib/transformation'
 require_relative '../lib/world'
 require_relative '../lib/camera'
+require 'benchmark'
 
-width = 800
-height = 400
+width = 400
+height = 200
 
 floor = Sphere()
 floor.transform = scaling(10, 0.01, 10)
@@ -24,7 +25,7 @@ left_wall = Sphere()
 left_wall.transform =
   translation(0, 0, 5) *
   rotation_y(-Math::PI / 4) *
-  rotation_x(Math::PI / 2) * 
+  rotation_x(Math::PI / 2) *
   scaling(10, 0.01, 10)
 left_wall.material = Material().tap do |m|
   m.colour = Colour(1, 0.9, 0.9)
@@ -35,7 +36,7 @@ right_wall = Sphere()
 right_wall.transform =
   translation(0, 0, 5) *
   rotation_y(Math::PI / 4) *
-  rotation_x(Math::PI / 2) * 
+  rotation_x(Math::PI / 2) *
   scaling(10, 0.01, 10)
 right_wall.material = Material().tap do |m|
   m.colour = Colour(1, 0.9, 0.9)
@@ -53,7 +54,7 @@ end
 right_sphere = Sphere()
 right_sphere.transform = translation(1.5, 0.5, -0.5) * scaling(0.5, 0.5, 0.5)
 right_sphere.material = Material().tap do |m|
-  m.colour = Colour(0.5, 1, 0.1)
+  m.colour = Colour(1, 0, 0.1)
   m.diffuse = 0.7
   m.specular = 0.3
 end
@@ -62,12 +63,13 @@ left_sphere = Sphere()
 left_sphere.transform =
   translation(-1.5, 0.33, -0.75) * scaling(0.33, 0.33, 0.33)
 left_sphere.material = Material().tap do |m|
-  m.colour = Colour(1, 0.8, 0.1)
+  m.colour = Colour(0, 0.1, 1)
   m.diffuse = 0.7
   m.specular = 0.3
 end
 
-light_position = Point(-10, 10, -10)
+light_position = Point(5, 1, -10)
+#light_position = Point(-10, 10, -10)
 light_colour = Colour(1, 1, 1)
 light = PointLight(light_position, light_colour)
 

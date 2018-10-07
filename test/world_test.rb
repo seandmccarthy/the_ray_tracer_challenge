@@ -65,4 +65,40 @@ class TestWorld < Minitest::Test
     c = world.colour_at(ray)
     assert_equal c, Colour(0.38066, 0.47582, 0.28549)
   end
+
+  def test_there_is_no_shadow_when_nothing_is_collinear_with_point_and_light
+    world = default_world
+    p = Point(0, 10, 0)
+    assert !world.shadowed?(p)
+  end
+
+  def test_shadow_when_an_object_is_between_the_point_and_the_light
+    world = default_world
+    p = Point(10, -10, 10)
+    assert world.shadowed?(p)
+  end
+
+  def test_there_is_no_shadow_when_an_object_is_behind_the_light
+    world = default_world
+    p = Point(-20, 20, -20)
+    assert !world.shadowed?(p)
+  end
+
+  def test_there_is_no_shadow_when_an_object_is_behind_the_point
+    world = default_world
+    p = Point(-2, 2, -2)
+    assert !world.shadowed?(p)
+  end
+
+  def test_shade_hit_is_given_an_intersection_in_shadow
+    s1 = Sphere()
+    s2 = Sphere().tap { |s| s.transform = translation(0, 0, 10) }
+    light = PointLight(Point(0, 0, -10), Colour(1, 1, 1))
+    w = World(objects: [s1, s2], light_source: light)
+    ray = Ray(Point(0, 0, 5), Vector(0, 0, 1))
+    hit = Intersection(4, s2)
+    hit.prepare_hit(ray)
+    c = w.shade_hit(hit)
+    assert_equal c, Colour(0.1, 0.1, 0.1)
+  end
 end

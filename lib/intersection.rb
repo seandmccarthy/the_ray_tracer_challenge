@@ -1,6 +1,8 @@
 class Intersection
   attr_reader :t, :object, :point, :eye_vector, :normal_vector, :inside
 
+  OFFSET = 0.0001
+
   def initialize(t, object)
     @t = t
     @object = object
@@ -12,6 +14,7 @@ class Intersection
     @normal_vector = @object.normal_at(@point)
     @inside = @normal_vector.dot(@eye_vector).negative?
     @normal_vector = -@normal_vector if @inside
+    @point += @normal_vector * OFFSET
   end
 end
 

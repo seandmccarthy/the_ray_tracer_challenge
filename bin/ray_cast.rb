@@ -18,8 +18,14 @@ canvas_pixels = 200
 pixel_size = wall_size / canvas_pixels
 half = wall_size / 2
 
-material_colour = Colour(1, 1, 0) # Colour(1, 0.2, 1)
-material = Material().tap { |m| m.colour = material_colour }
+material_colour = Colour(0, 1, 0) # Colour(1, 0.2, 1)
+material = Material().tap do |m|
+  m.colour = material_colour
+  m.ambient = 0.1
+  m.diffuse = 0.9
+  m.specular = 0.9
+  m.shininess = 50
+end
 sphere = Sphere().tap { |s| s.material = material }
 #sphere.transform = scaling(1, 0.5, 1)
 light_position = Point(-10, 10, -10)

@@ -10,8 +10,10 @@ class Material
     @shininess = shininess
   end
 
-  def lighting(light, point, eye_vector, normal_vector)
+  def lighting(light:, point:, eye_vector:, normal_vector:, in_shadow: false)
     light_dot_normal = light_vector(light, point).dot(normal_vector)
+    ambient = ambient_colour(light)
+    return colour_from(ambient) if in_shadow
     if light_dot_normal.negative?
       diffuse_colour = Colour::BLACK
       specular_colour = Colour::BLACK
@@ -20,7 +22,7 @@ class Material
       specular_colour =
         specular_colour_from(light, point, eye_vector, normal_vector)
     end
-    colour_from ambient_colour(light) + specular_colour + diffuse_colour
+    colour_from(ambient + specular_colour + diffuse_colour)
   end
 
   private

@@ -6,7 +6,7 @@ class Tuple
     @x = Float x
     @y = Float y
     @z = Float z
-    @w = Float w
+    @w = Integer w
   end
 
   def ==(other)

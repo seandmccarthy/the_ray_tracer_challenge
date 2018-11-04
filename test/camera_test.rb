@@ -57,6 +57,6 @@ class TestCamera < Minitest::Test
     image = c.render(w)
     IO.write('render_test.ppm', image.to_ppm.string)
 
-    assert_equal image.pixel_at(5, 5), Colour(0.38066, 0.47583, 0.2855)
+    assert_equal image.pixel_at(5, 5), Colour(0.3986, 0.49824, 0.29895)
   end
 end

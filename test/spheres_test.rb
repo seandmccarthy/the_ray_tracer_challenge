@@ -1,6 +1,7 @@
 require 'minitest/autorun'
 require_relative '../lib/tuple'
 require_relative '../lib/ray'
+require_relative '../lib/shape'
 require_relative '../lib/sphere'
 
 class TestSpheres < Minitest::Test
@@ -54,18 +55,6 @@ class TestSpheres < Minitest::Test
     assert_equal xs.count, 2
     assert_equal xs[0].object, s
     assert_equal xs[1].object, s
-  end
-
-  def test_sphere_default_transformation
-    s = Sphere()
-    assert_equal s.transform, Matrix.identity(4)
-  end
-
-  def test_changing_sphere_transformation
-    s = Sphere()
-    t = translation(2, 3, 4)
-    s.transform = t
-    assert_equal s.transform, t
   end
 
   def test_intersecting_a_scaled_sphere_with_a_ray
@@ -127,17 +116,5 @@ class TestSpheres < Minitest::Test
     s.transform = scaling(1, 0.5, 1)
     n = s.normal_at(Point(0, 2 / Math.sqrt(2), -2 / Math.sqrt(2)))
     assert_equal n, Vector(0, 0.97014, -0.24254)
-  end
-
-  def test_a_sphere_has_a_default_material
-    s = Sphere()
-    assert_kind_of Material, s.material
-  end
-
-  def test_a_sphere_can_be_assigned_a_material
-    s = Sphere()
-    m = Material.new(ambient: 1)
-    s.material = m
-    assert_equal s.material.ambient, m.ambient
   end
 end

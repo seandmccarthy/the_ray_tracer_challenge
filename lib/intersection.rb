@@ -1,7 +1,7 @@
 class Intersection
   attr_reader :t, :object, :point, :eye_vector, :normal_vector, :inside
 
-  OFFSET = 0.0001
+  OFFSET = 0.000001
 
   def initialize(t, object)
     @t = t

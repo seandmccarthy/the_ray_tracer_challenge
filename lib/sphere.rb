@@ -1,4 +1,4 @@
-class Sphere
+class Sphere < Shape
   attr_accessor :transform, :material
 
   def initialize(material: Material.new, transform: Matrix.identity(4))
@@ -6,17 +6,13 @@ class Sphere
     @transform = transform
   end
 
-  def intersect(ray)
-    a, b, c = coefficents(ray.transform(@transform.inverse))
+  def intersect_shape(object_space_ray)
+    a, b, c = coefficents(object_space_ray)
     build_intersections quadratic_roots(a, b, c)
   end
 
-  def normal_at(world_point)
-    object_point = transform.inverse * world_point
-    object_normal = object_point - origin
-    world_normal = transform.inverse.transpose * object_normal
-    world_normal.w = 0
-    world_normal.normalise
+  def normal_at_shape(object_space_point)
+    object_space_point - origin
   end
 
   private

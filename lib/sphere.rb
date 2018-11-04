@@ -1,11 +1,4 @@
 class Sphere < Shape
-  attr_accessor :transform, :material
-
-  def initialize(material: Material.new, transform: Matrix.identity(4))
-    @material = material
-    @transform = transform
-  end
-
   def intersect_shape(object_space_ray)
     a, b, c = coefficents(object_space_ray)
     build_intersections quadratic_roots(a, b, c)

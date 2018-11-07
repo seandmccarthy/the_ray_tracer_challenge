@@ -2,6 +2,8 @@ class Camera
   attr_reader :hsize, :vsize, :field_of_view, :pixel_size
   attr_accessor :transform
 
+  WORKERS = 4
+
   def initialize(hsize, vsize, field_of_view, transform = Matrix.identity)
     @hsize = hsize
     @vsize = vsize
@@ -24,17 +26,25 @@ class Camera
 
   def render(world)
     Canvas(@hsize, @vsize).tap do |image|
-      (0..@vsize-1).each do |y|
-        (0..@hsize-1).each do |x|
-          ray = ray_for_pixel(x, y)
-          colour = world.colour_at(ray)
-          image.write_pixel(x, y, colour)
-        end
+      (0...@vsize).step(WORKERS).each do |y|
+        WORKERS.times.map do |i|
+          Thread.new do
+            render_row_at(y + i, image, world)
+          end
+        end.each(&:join)
       end
     end
   end
 
   private
+
+  def render_row_at(y, image, world)
+    (0...@hsize).each do |x|
+      ray = ray_for_pixel(x, y)
+      colour = world.colour_at(ray)
+      image.write_pixel(x, y, colour)
+    end
+  end
 
   def calculate_sizes
     half_view = Math.tan(@field_of_view / 2.0)

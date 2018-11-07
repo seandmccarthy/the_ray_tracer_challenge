@@ -4,7 +4,7 @@ class Plane < Shape
   end
 
   def intersect_shape(object_space_ray)
-    return Intersections() if object_space_ray.direction.y.abs < 0.0001
+    return Intersections() if object_space_ray.direction.y.abs < 0.00001
     t = -object_space_ray.origin.y / object_space_ray.direction.y
     Intersections(Intersection(t, self))
   end

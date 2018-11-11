@@ -12,7 +12,7 @@ class Material
 
   def lighting(object:, light:, point:, eye_vector:, normal_vector:, in_shadow: false)
     light_dot_normal = light_vector(light, point).dot(normal_vector)
-    local_colour = pattern&.stripe_at_object(object, point) || colour
+    local_colour = pattern&.pattern_at_shape(shape: object, point: point) || colour
     effective_colour = local_colour * light.intensity
     ambient_colour = effective_colour * ambient
     return colour_from(ambient_colour) if in_shadow

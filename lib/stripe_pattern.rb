@@ -1,22 +1,15 @@
-class StripePattern
+class StripePattern < Pattern
   attr_reader :a, :b
-  attr_accessor :transform
 
   def initialize(a:, b:, transform: Matrix.identity(4))
+    super(transform: transform)
     @a = a
     @b = b
-    @transform = transform
   end
 
-  def stripe_at(point)
+  def pattern_at(point)
     return a if point.x.floor.even?
     b
-  end
-
-  def stripe_at_object(object, world_point)
-    object_space_point = object.transform.inverse * world_point
-    pattern_point = transform.inverse * object_space_point
-    stripe_at(pattern_point)
   end
 end
 

@@ -2,6 +2,7 @@ require 'minitest/autorun'
 require_relative '../lib/material'
 require_relative '../lib/tuple'
 require_relative '../lib/point_light'
+require_relative '../lib/pattern'
 require_relative '../lib/stripe_pattern'
 
 class TestMaterials < Minitest::Test

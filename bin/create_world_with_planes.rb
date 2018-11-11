@@ -11,9 +11,10 @@ require_relative '../lib/intersection'
 require_relative '../lib/transformation'
 require_relative '../lib/world'
 require_relative '../lib/camera'
+require_relative '../lib/stripe_pattern'
 require 'benchmark'
 
-multiplier = 6
+multiplier = 1
 width = 200 * multiplier
 height = 100 * multiplier
 
@@ -24,6 +25,7 @@ end
 floor = Plane()
 floor.transform = translation(0, 0, 0)
 floor.material = Material().tap do |m|
+  m.pattern = StripePattern(a: Colour(0.6, 0.6, 0.8), b: Colour(0.7, 0.7, 0.9))
   m.colour = Colour(1, 0.9, 0.9)
   m.specular = 0
 end
@@ -85,6 +87,9 @@ middle_sphere.material = Material().tap do |m|
   r = 0.9; g = 0.4; b = 0.8
   #puts "#{r}, #{g}, #{b}"
   #m.colour = Colour(0.1, 1, 0.5)
+  m.pattern = StripePattern(a: Colour(r, g, b), b: Colour(0.8, 0.8, 0.8)).tap do |p|
+    p.transform = scaling(0.25, 0.25, 0.25) * rotation_y(-Math::PI / 4)
+  end
   m.colour = Colour(r, g, b)
   m.diffuse = 0.7
   m.specular = 0.3

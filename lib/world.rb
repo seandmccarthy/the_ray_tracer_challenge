@@ -12,6 +12,7 @@ class World
 
   def shade_hit(hit)
     hit.object.material.lighting(
+      object: hit.object,
       light: light_source,
       point: hit.point,
       eye_vector: hit.eye_vector,

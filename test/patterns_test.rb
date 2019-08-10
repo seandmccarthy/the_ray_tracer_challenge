@@ -1,6 +1,9 @@
 require 'minitest/autorun'
 require_relative '../lib/pattern'
 require_relative '../lib/stripe_pattern'
+require_relative '../lib/gradient_pattern'
+require_relative '../lib/ring_pattern'
+require_relative '../lib/checker_pattern'
 require_relative '../lib/tuple'
 require_relative '../lib/matrix'
 require_relative '../lib/transformation'
@@ -69,12 +72,42 @@ class TestPatterns < Minitest::Test
     assert_equal c, Colour(1, 1.5, 2)
   end
 
-  def test_stripes_with_both_an_object_and_pattern_transformation
+  def test_pattern_with_both_an_object_and_pattern_transformation
     o = Sphere()
     o.transform = scaling(2, 2, 2)
     pattern = TestPattern.new
     pattern.transform = translation(0.5, 1, 1.5)
     c = pattern.pattern_at_shape(shape: o, point: Point(2.5, 3, 3.5))
     assert_equal c, Colour(0.75, 0.5, 0.25)
+  end
+
+  def test_gradient_linearly_interpolates_between_colours
+    pattern = GradientPattern(a: Colour::BLACK, b: Colour::WHITE)
+    assert_equal pattern.pattern_at(Point(0, 0, 0)), Colour::BLACK
+    assert_equal pattern.pattern_at(Point(0.25, 0, 0)), Colour(0.25, 0.25, 0.25)
+    assert_equal pattern.pattern_at(Point(0.5, 0, 0)), Colour(0.5, 0.5, 0.5)
+    assert_equal pattern.pattern_at(Point(0.75, 0, 0)), Colour(0.75, 0.75, 0.75)
+  end
+
+  def test_ring_pattern
+    pattern = RingPattern(a: Colour::WHITE, b: Colour::BLACK)
+    assert_equal pattern.pattern_at(Point(0, 0, 0)), Colour::WHITE
+    assert_equal pattern.pattern_at(Point(1.0, 0, 0)), Colour::BLACK
+    assert_equal pattern.pattern_at(Point(0, 0, 1.0)), Colour::BLACK
+    assert_equal pattern.pattern_at(Point(0.708, 0, 0.708)), Colour::BLACK
+    assert_equal pattern.pattern_at(Point(1.415, 0, 1.415)), Colour::WHITE
+  end
+
+  def test_checker_pattern_repeats_in_x_y_z
+    pattern = CheckerPattern(a: Colour::WHITE, b: Colour::BLACK)
+    assert_equal pattern.pattern_at(Point(0, 0, 0)), Colour::WHITE
+    assert_equal pattern.pattern_at(Point(0.99, 0, 0)), Colour::BLACK
+    assert_equal pattern.pattern_at(Point(1.01, 0, 0)), Colour::BLACK
+    assert_equal pattern.pattern_at(Point(0, 0, 0)), Colour::WHITE
+    assert_equal pattern.pattern_at(Point(0, 0.99, 0)), Colour::BLACK
+    assert_equal pattern.pattern_at(Point(0, 1.01, 0)), Colour::BLACK
+    assert_equal pattern.pattern_at(Point(0, 0, 0)), Colour::WHITE
+    assert_equal pattern.pattern_at(Point(0, 0, 0.99)), Colour::BLACK
+    assert_equal pattern.pattern_at(Point(0, 0, 1.01)), Colour::BLACK
   end
 end

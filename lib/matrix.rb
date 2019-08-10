@@ -110,6 +110,12 @@ class Matrix
   end
 
   def inverse
+    @inverse ||= calculate_inverse
+  end
+
+  private
+
+  def calculate_inverse
     inv_matrix = Matrix.empty(row_size, column_size, 0)
     row_size.times do |x|
       column_size.times do |y|
@@ -123,8 +129,6 @@ class Matrix
       end
     end
   end
-
-  private
 
   def in_delta(a, b, delta = 0.001)
     (a - b).abs <= delta

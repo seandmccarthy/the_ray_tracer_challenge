@@ -1,13 +1,14 @@
 class Material
   attr_accessor :colour, :ambient, :diffuse, :specular, :shininess, :pattern
 
-  def initialize(colour: Colour(1, 1, 1), ambient: 0.1, diffuse: 0.9,
+  def initialize(colour: Colour(0.9, 0.9, 0.9), ambient: 0.1, diffuse: 0.9,
                  specular: 0.9, shininess: 200, pattern: nil)
     @colour = colour
     @ambient = ambient
     @diffuse = diffuse
     @specular = specular
     @shininess = shininess
+    @pattern = pattern
   end
 
   def lighting(object:, light:, point:, eye_vector:, normal_vector:, in_shadow: false)
@@ -48,6 +49,6 @@ class Material
   end
 end
 
-def Material
-  Material.new
+def Material(*args)
+  Material.new(*args)
 end

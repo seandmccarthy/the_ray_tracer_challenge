@@ -2,7 +2,7 @@ class Camera
   attr_reader :hsize, :vsize, :field_of_view, :pixel_size
   attr_accessor :transform
 
-  WORKERS = 4
+  DEFAULT_WORKERS = 4
 
   def initialize(hsize, vsize, field_of_view, transform = Matrix.identity)
     @hsize = hsize
@@ -24,15 +24,18 @@ class Camera
     Ray(origin, direction)
   end
 
-  def render(world)
+  def render(world, workers: DEFAULT_WORKERS)
+    chunk_size = @vsize / workers
     Canvas(@hsize, @vsize).tap do |image|
-      (0...@vsize).step(WORKERS).each do |y|
-        WORKERS.times.map do |i|
-          Thread.new do
-            render_row_at(y + i, image, world)
+      workers.times.map do |i|
+        Thread.new do
+          y_start = i * chunk_size
+          y_end = (i + 1) * chunk_size
+          (y_start...y_end).each do |y|
+            render_row_at(y, image, world)
           end
-        end.each(&:join)
-      end
+        end
+      end.each(&:join)
     end
   end
 

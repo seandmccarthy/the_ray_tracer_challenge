@@ -104,8 +104,11 @@ class Colour < Tuple
   alias green y
   alias blue z
 
-  WHITE = Colour.new(255, 255, 255)
+  WHITE = Colour.new(1, 1, 1)
   BLACK = Colour.new(0, 0, 0)
+  RED   = Colour.new(1, 0, 0)
+  GREEN = Colour.new(0, 1, 0)
+  BLUE  = Colour.new(0, 0, 1)
 
   def hadamard_product(other)
     Colour(red * other.red, green * other.green, blue * other.blue)

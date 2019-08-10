@@ -7,9 +7,10 @@ class BlendedPattern < Pattern
     @b = b
   end
 
-  def pattern_at(point)
-    a_colour = a.pattern_at(point)
-    b_colour = b.pattern_at(point)
+  def pattern_at_shape(shape:, point:)
+    a_colour = a.pattern_at_shape(shape: shape, point: point)
+    b_colour = b.pattern_at_shape(shape: shape, point: point)
+
     Colour((a_colour.red + b_colour.red) / 2.0,
            (a_colour.green + b_colour.green) / 2.0,
            (a_colour.blue + b_colour.blue) / 2.0)

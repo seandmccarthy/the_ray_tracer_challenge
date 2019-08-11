@@ -101,13 +101,13 @@ class TestPatterns < Minitest::Test
   def test_checker_pattern_repeats_in_x_y_z
     pattern = CheckerPattern(a: Colour::WHITE, b: Colour::BLACK)
     assert_equal pattern.pattern_at(Point(0, 0, 0)), Colour::WHITE
-    assert_equal pattern.pattern_at(Point(0.99, 0, 0)), Colour::BLACK
+    assert_equal pattern.pattern_at(Point(0.99, 0, 0)), Colour::WHITE
     assert_equal pattern.pattern_at(Point(1.01, 0, 0)), Colour::BLACK
     assert_equal pattern.pattern_at(Point(0, 0, 0)), Colour::WHITE
-    assert_equal pattern.pattern_at(Point(0, 0.99, 0)), Colour::BLACK
+    assert_equal pattern.pattern_at(Point(0, 0.99, 0)), Colour::WHITE
     assert_equal pattern.pattern_at(Point(0, 1.01, 0)), Colour::BLACK
     assert_equal pattern.pattern_at(Point(0, 0, 0)), Colour::WHITE
-    assert_equal pattern.pattern_at(Point(0, 0, 0.99)), Colour::BLACK
+    assert_equal pattern.pattern_at(Point(0, 0, 0.99)), Colour::WHITE
     assert_equal pattern.pattern_at(Point(0, 0, 1.01)), Colour::BLACK
   end
 end

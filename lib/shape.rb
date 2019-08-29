@@ -25,6 +25,7 @@ class Shape
   def normal_at_shape(*)
     raise NotImplementedError
   end
+
   private
 
   def to_object_space(ray)

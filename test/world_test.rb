@@ -31,13 +31,44 @@ class TestWorld < Minitest::Test
     assert_equal xs[3].t, 6
   end
 
+  def test_precomputing_the_state_of_an_intersection
+    ray = Ray(Point(0, 0, -5), Vector(0, 0, 1))
+    shape = Sphere()
+    i = Intersection(4, shape)
+    comps = i.prepare_computations(ray)
+    assert_equal comps.t, i.t
+    assert_equal comps.object, i.object
+    assert_equal comps.point, Point(0, 0, -1)
+    assert_equal comps.eye_vector, Vector(0, 0, -1)
+    assert_equal comps.normal_vector, Vector(0, 0, -1)
+  end
+
+  def test_the_hit_when_an_intersection_is_on_the_outside
+    ray = Ray(Point(0, 0, -5), Vector(0, 0, 1))
+    shape = Sphere()
+    i = Intersection(4, shape)
+    comps = i.prepare_computations(ray)
+    assert !comps.inside
+  end
+
+  def test_the_hit_when_an_intersection_is_on_the_inside
+    ray = Ray(Point(0, 0, 0), Vector(0, 0, 1))
+    shape = Sphere()
+    i = Intersection(1, shape)
+    comps = i.prepare_computations(ray)
+    assert_equal comps.point, Point(0, 0, 1)
+    assert_equal comps.eye_vector, Vector(0, 0, -1)
+    assert comps.inside
+    assert_equal comps.normal_vector, Vector(0, 0, -1)
+  end
+
   def test_shading_an_intersection
     world = default_world
     ray = Ray(Point(0, 0, -5), Vector(0, 0, 1))
     shape = world.objects.first
     hit = Intersection(4, shape)
-    hit.prepare_hit(ray)
-    c = world.shade_hit(hit)
+    comps = hit.prepare_computations(ray)
+    c = world.shade_hit(comps)
     assert_equal c, Colour(0.38066, 0.47582, 0.28549)
   end
 
@@ -47,8 +78,8 @@ class TestWorld < Minitest::Test
     ray = Ray(Point(0, 0, 0), Vector(0, 0, 1))
     shape = world.objects[1]
     hit = Intersection(0.5, shape)
-    hit.prepare_hit(ray)
-    c = world.shade_hit(hit)
+    comps = hit.prepare_computations(ray)
+    c = world.shade_hit(comps)
     assert_equal c, Colour(0.90499, 0.90499, 0.90499)
   end
 
@@ -64,6 +95,16 @@ class TestWorld < Minitest::Test
     ray = Ray(Point(0, 0, -5), Vector(0, 0, 1))
     c = world.colour_at(ray)
     assert_equal c, Colour(0.38066, 0.47582, 0.28549)
+  end
+
+  def test_the_colour_with_an_intersection_behind_the_ray
+    world = default_world
+    outer = world.objects.first
+    outer.material.ambient = 1
+    inner = world.objects.last
+    inner.material.ambient = 1
+    ray = Ray(Point(0, 0, 0.75), Vector(0, 0, -1))
+    assert_equal world.colour_at(ray), inner.material.colour
   end
 
   def test_there_is_no_shadow_when_nothing_is_collinear_with_point_and_light
@@ -97,8 +138,8 @@ class TestWorld < Minitest::Test
     w = World(objects: [s1, s2], light_source: light)
     ray = Ray(Point(0, 0, 5), Vector(0, 0, 1))
     hit = Intersection(4, s2)
-    hit.prepare_hit(ray)
-    c = w.shade_hit(hit)
+    comps = hit.prepare_computations(ray)
+    c = w.shade_hit(comps)
     assert_equal c, Colour(0.1, 0.1, 0.1)
   end
 end

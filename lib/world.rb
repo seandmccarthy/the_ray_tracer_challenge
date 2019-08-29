@@ -10,22 +10,21 @@ class World
     objects.map { |obj| obj.intersect(ray) }.reduce(:+)
   end
 
-  def shade_hit(hit)
-    hit.object.material.lighting(
-      object: hit.object,
+  def shade_hit(comps)
+    comps.object.material.lighting(
+      object: comps.object,
       light: light_source,
-      point: hit.point,
-      eye_vector: hit.eye_vector,
-      normal_vector: hit.normal_vector,
-      in_shadow: shadowed?(hit.point)
+      point: comps.over_point,
+      eye_vector: comps.eye_vector,
+      normal_vector: comps.normal_vector,
+      in_shadow: shadowed?(comps.over_point)
     )
   end
 
   def colour_at(ray)
     hit = intersect(ray).hit
     return Colour(0, 0, 0) if hit.nil?
-    hit.prepare_hit(ray)
-    shade_hit(hit)
+    shade_hit(hit.prepare_computations(ray))
   end
 
   def shadowed?(point)

@@ -8,13 +8,25 @@ class Intersection
     @object = object
   end
 
-  def prepare_hit(ray)
-    @point = ray.position(@t)
-    @eye_vector = -ray.direction
-    @normal_vector = @object.normal_at(@point)
-    @inside = @normal_vector.dot(@eye_vector).negative?
-    @normal_vector = -@normal_vector if @inside
-    @point += @normal_vector * OFFSET
+  def prepare_computations(ray)
+    point = ray.position(@t)
+    normal_vector = @object.normal_at(point)
+    eye_vector = -ray.direction
+    inside = false
+    if normal_vector.dot(eye_vector).negative?
+      inside = true
+      normal_vector = -normal_vector
+    end
+    OpenStruct.new(
+      t: @t,
+      object: @object,
+      point: point,
+      eye_vector: eye_vector,
+      normal_vector: normal_vector,
+      inside: inside,
+      reflect_vector: ray.direction.reflect(normal_vector),
+      over_point: point + normal_vector * 0.0001
+    )
   end
 end
 

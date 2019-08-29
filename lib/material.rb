@@ -1,13 +1,14 @@
 class Material
-  attr_accessor :colour, :ambient, :diffuse, :specular, :shininess, :pattern
+  attr_accessor :colour, :ambient, :diffuse, :specular, :shininess, :reflective, :pattern
 
-  def initialize(colour: Colour(0.9, 0.9, 0.9), ambient: 0.1, diffuse: 0.9,
-                 specular: 0.9, shininess: 200, pattern: nil)
+  def initialize(colour: Colour(1, 1, 1), ambient: 0.1, diffuse: 0.9,
+                 specular: 0.9, shininess: 200, reflective: 0.0, pattern: nil)
     @colour = colour
     @ambient = ambient
     @diffuse = diffuse
     @specular = specular
     @shininess = shininess
+    @reflective = reflective
     @pattern = pattern
   end
 
@@ -40,11 +41,12 @@ class Material
 
   def specular_colour_from(light, point, eye_vector, normal_vector)
     reflect_vector = -light_vector(light, point).reflect(normal_vector)
-    reflect_dot_eye = reflect_vector.dot(eye_vector).round(5)**shininess
+    reflect_dot_eye = reflect_vector.dot(eye_vector).round(5)
     if reflect_dot_eye <= 0
       Colour::BLACK
     else
-      light.intensity * specular * reflect_dot_eye
+      factor = reflect_dot_eye ** shininess
+      light.intensity * specular * factor
     end
   end
 end

@@ -36,6 +36,6 @@ class Sphere < Shape
   end
 end
 
-def Sphere
-  Sphere.new
+def Sphere(*args)
+  Sphere.new(*args)
 end

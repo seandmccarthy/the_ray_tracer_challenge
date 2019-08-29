@@ -84,7 +84,7 @@ class TestMaterials < Minitest::Test
   end
 
   def test_lighting_with_a_pattern_applied
-    m = Material.new(ambient: 1, diffuse: 0, specular: 0)
+    m = Material(ambient: 1, diffuse: 0, specular: 0)
     m.pattern = StripePattern(a: Colour::WHITE, b: Colour::BLACK)
     eye_vector = Vector(0, 0, -1)
     normal_vector = Vector(0, 0, -1)
@@ -97,5 +97,10 @@ class TestMaterials < Minitest::Test
                     in_shadow: false)
     assert_equal c1, Colour::WHITE
     assert_equal c2, Colour::BLACK
+  end
+
+  def test_reflectivity_for_the_default_material
+    m = Material()
+    assert_equal m.reflective, 0.0
   end
 end

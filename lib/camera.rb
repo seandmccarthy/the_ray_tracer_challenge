@@ -18,7 +18,6 @@ class Camera
     world_x = @half_width - x_offset
     world_y = @half_height - y_offset
     pixel = @transform.inverse * Point(world_x, world_y, -1)
-
     origin = @transform.inverse * Point(0, 0, 0)
     direction = (pixel - origin).normalise
     Ray(origin, direction)

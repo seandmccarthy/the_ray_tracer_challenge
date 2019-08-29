@@ -11,20 +11,6 @@ class Matrix
     end
   end
 
-  def self.view_transform(from:, to:, up:)
-    forward = (to - from).normalise
-    up_normal = up.normalise
-    left = forward.cross(up_normal)
-    true_up = left.cross(forward)
-    orientation = Matrix(
-      [left.x,     left.y,     left.z,     0],
-      [true_up.x,  true_up.y,  true_up.z,  0],
-      [-forward.x, -forward.y, -forward.z, 0],
-      [0,          0,          0,          1]
-    )
-    orientation * translation(-from.x, -from.y, -from.z)
-  end
-
   def initialize(*rows)
     @rows = [*rows]
   end

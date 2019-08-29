@@ -57,37 +57,45 @@ class TestIntersections < Minitest::Test
     ray = Ray(Point(0, 0, -5), Vector(0, 0, 1))
     shape = Sphere()
     hit = Intersection(4, shape)
-    hit.prepare_hit(ray)
-    assert_equal hit.point, Point(0, 0, -1)
-    assert_equal hit.eye_vector, Vector(0, 0, -1)
-    assert_equal hit.normal_vector, Vector(0, 0, -1)
+    comps = hit.prepare_computations(ray)
+    assert_equal comps.point, Point(0, 0, -1)
+    assert_equal comps.eye_vector, Vector(0, 0, -1)
+    assert_equal comps.normal_vector, Vector(0, 0, -1)
   end
 
   def test_an_intersection_occurs_on_the_outside
     ray = Ray(Point(0, 0, -5), Vector(0, 0, 1))
     shape = Sphere()
     hit = Intersection(4, shape)
-    hit.prepare_hit(ray)
-    assert !hit.inside
+    comps = hit.prepare_computations(ray)
+    assert !comps.inside
   end
 
   def test_an_intersection_occurs_on_the_inside
     ray = Ray(Point(0, 0, 0), Vector(0, 0, 1))
     shape = Sphere()
     hit = Intersection(1, shape)
-    hit.prepare_hit(ray)
-    assert_equal hit.point, Point(0, 0, 1)
-    assert_equal hit.eye_vector, Vector(0, 0, -1)
-    assert_equal hit.normal_vector, Vector(0, 0, -1)
-    assert hit.inside
+    comps = hit.prepare_computations(ray)
+    assert_equal comps.point, Point(0, 0, 1)
+    assert_equal comps.eye_vector, Vector(0, 0, -1)
+    assert_equal comps.normal_vector, Vector(0, 0, -1)
+    assert comps.inside
   end
 
-  def test_the_point_is_an_offset
+  def test_the_hit_should_offset_the_point
     ray = Ray(Point(0, 0, -5), Vector(0, 0, 1))
-    shape = Sphere()
-    hit = Intersection(4, shape)
-    hit.prepare_hit(ray)
-    assert hit.point.z > -1.1
-    assert hit.point.z < -1
+    shape = Sphere(transform: translation(0, 0, 1))
+    hit = Intersection(5, shape)
+    comps = hit.prepare_computations(ray)
+    assert comps.over_point.z < -0.00001/2
+    assert comps.point.z > comps.over_point.z
+  end
+
+  def test_precomputing_the_reflection_vector
+    shape = Plane()
+    ray = Ray(Point(0, 1, -1), Vector(0, -Math.sqrt(2) / 2, Math.sqrt(2) / 2))
+    intersection = Intersection(Math.sqrt(2), shape)
+    comps = intersection.prepare_computations(ray)
+    assert_equal comps.reflect_vector, Vector(0, Math.sqrt(2) / 2, Math.sqrt(2) / 2)
   end
 end

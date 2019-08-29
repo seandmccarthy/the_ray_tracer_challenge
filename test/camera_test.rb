@@ -53,10 +53,8 @@ class TestCamera < Minitest::Test
     from = Point(0, 0, -5)
     to = Point(0, 0, 0)
     up = Vector(0, 1, 0)
-    c.transform = Matrix.view_transform(from: from, to: to, up: up)
+    c.transform = view_transform(from: from, to: to, up: up)
     image = c.render(w)
-    IO.write('render_test.ppm', image.to_ppm.string)
-
     assert_equal image.pixel_at(5, 5), Colour(0.3986, 0.49824, 0.29895)
   end
 end

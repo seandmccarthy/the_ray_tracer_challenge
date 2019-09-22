@@ -1,5 +1,6 @@
 class Tuple
-  EPSILON = 5
+  DECIMAL_PLACES = 5
+  EPSILON = 0.0001
   attr_accessor :x, :y, :z, :w
 
   def initialize(x, y, z, w)
@@ -10,9 +11,9 @@ class Tuple
   end
 
   def ==(other)
-    x.round(EPSILON) == other.x.round(EPSILON) &&
-      y.round(EPSILON) == other.y.round(EPSILON) &&
-      z.round(EPSILON) == other.z.round(EPSILON) &&
+    x.round(DECIMAL_PLACES) == other.x.round(DECIMAL_PLACES) &&
+      y.round(DECIMAL_PLACES) == other.y.round(DECIMAL_PLACES) &&
+      z.round(DECIMAL_PLACES) == other.z.round(DECIMAL_PLACES) &&
       w == other.w
   end
 
@@ -44,10 +45,10 @@ class Tuple
 
   def normalise
     denominator = magnitude
-    Tuple.new((x / denominator).round(EPSILON),
-              (y / denominator).round(EPSILON),
-              (z / denominator).round(EPSILON),
-              (w / denominator).round(EPSILON))
+    Tuple.new((x / denominator).round(DECIMAL_PLACES),
+              (y / denominator).round(DECIMAL_PLACES),
+              (z / denominator).round(DECIMAL_PLACES),
+              (w / denominator).round(DECIMAL_PLACES))
   end
 
   def dot(other)
@@ -65,6 +66,10 @@ class Tuple
 
   def reflect(normal)
     self - normal * 2 * dot(normal)
+  end
+
+  def to_s
+    "x: #{x}, y: #{y}, z: #{z}, w: #{w}"
   end
 end
 
@@ -98,7 +103,12 @@ end
 
 class Colour < Tuple
   def initialize(red, green, blue)
-    super(red.round(EPSILON), green.round(EPSILON), blue.round(EPSILON), 0)
+    super(
+      red.round(DECIMAL_PLACES),
+      green.round(DECIMAL_PLACES),
+      blue.round(DECIMAL_PLACES),
+      0
+    )
   end
   alias red x
   alias green y
@@ -109,6 +119,7 @@ class Colour < Tuple
   RED   = Colour.new(1, 0, 0)
   GREEN = Colour.new(0, 1, 0)
   BLUE  = Colour.new(0, 0, 1)
+  PURPLE  = Colour.new(0.5, 0, 0.5)
 
   def hadamard_product(other)
     Colour(red * other.red, green * other.green, blue * other.blue)

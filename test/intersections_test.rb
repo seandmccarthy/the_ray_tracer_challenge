@@ -98,4 +98,73 @@ class TestIntersections < Minitest::Test
     comps = intersection.prepare_computations(ray)
     assert_equal comps.reflect_vector, Vector(0, Math.sqrt(2) / 2, Math.sqrt(2) / 2)
   end
+
+  def test_finding_n1_and_n2_at_various_intersectons
+    a = glass_sphere.tap do |s|
+      s.transform = scaling(2, 2, 2)
+      s.material.refractive_index = 1.5
+    end
+    b = glass_sphere.tap do |s|
+      s.transform = translation(0, 0, -0.25)
+      s.material.refractive_index = 2.0
+    end
+    c = glass_sphere.tap do |s|
+      s.transform = translation(0, 0, 0.25)
+      s.material.refractive_index = 2.5
+    end
+    ray = Ray(Point(0, 0, -4), Vector(0, 0, 1))
+    xs = Intersections(Intersection(2, a),  Intersection(2.75, b),
+                       Intersection(3.25, c), Intersection(4.75, b),
+                       Intersection(5.25, c), Intersection(6, a))
+    examples = [
+      [1.0, 1.5],
+      [1.5, 2.0],
+      [2.0, 2.5],
+      [2.5, 2.5],
+      [2.5, 1.5],
+      [1.5, 1.0]
+    ]
+    examples.each_with_index do |expected, index|
+      comps = xs[index].prepare_computations(ray, xs)
+      assert_equal expected.first, comps.n1
+      assert_equal expected.last, comps.n2
+    end
+  end
+
+  def test_the_under_point_is_offset_below_the_surface
+    ray = Ray(Point(0, 0, -5), Vector(0, 0, 1))
+    shape = glass_sphere.tap { |s| s.transform = translation(0, 0, 1) }
+    i = Intersection(5, shape)
+    xs = Intersections(i)
+    comps = i.prepare_computations(ray, xs)
+    assert comps.under_point.z > (Tuple::EPSILON / 2.0)
+    assert comps.point.z < comps.under_point.z
+  end
+
+  def test_the_schlick_approximation_under_total_internal_reflection
+    shape = glass_sphere
+    ray = Ray(Point(0, 0, Math.sqrt(2) / 2), Vector(0, 1, 0))
+    xs = Intersections(
+      Intersection(-Math.sqrt(2) / 2.0, shape),
+      Intersection(Math.sqrt(2) / 2.0, shape)
+    )
+    comps = xs[1].prepare_computations(ray, xs)
+    assert_equal 1.0, schlick(comps)
+  end
+
+  def test_the_schlick_approximation_with_perpendicular_viewing_angle
+    shape = glass_sphere
+    ray = Ray(Point(0, 0, 0), Vector(0, 1, 0))
+    xs = Intersections(Intersection(-1, shape), Intersection(1, shape))
+    comps = xs[1].prepare_computations(ray, xs)
+    assert_equal 0.04, schlick(comps)
+  end
+
+  def test_the_schlick_approx_with_small_angle_and_n2_gt_n1
+    shape = glass_sphere
+    ray = Ray(Point(0, 0.99, -2), Vector(0, 0, 1))
+    xs = Intersections(Intersection(1.8589, shape))
+    comps = xs[0].prepare_computations(ray, xs)
+    assert_equal 0.48873, schlick(comps)
+  end
 end

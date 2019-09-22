@@ -103,4 +103,10 @@ class TestMaterials < Minitest::Test
     m = Material()
     assert_equal m.reflective, 0.0
   end
+
+  def test_transparency_and_refractive_index_for_default_material
+    m = Material()
+    assert_equal m.transparency, 0.0
+    assert_equal m.refractive_index, 1.0
+  end
 end

@@ -55,6 +55,6 @@ class TestCamera < Minitest::Test
     up = Vector(0, 1, 0)
     c.transform = view_transform(from: from, to: to, up: up)
     image = c.render(w)
-    assert_equal image.pixel_at(5, 5), Colour(0.3986, 0.49824, 0.29895)
+    assert_equal image.pixel_at(5, 5), Colour(0.39859, 0.49824, 0.29894)
   end
 end

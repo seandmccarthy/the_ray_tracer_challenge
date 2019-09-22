@@ -39,3 +39,7 @@ end
 def Sphere(*args)
   Sphere.new(*args)
 end
+
+def glass_sphere
+  Sphere(transform: Matrix.identity, material: Material(transparency: 1.0, refractive_index: 1.5))
+end

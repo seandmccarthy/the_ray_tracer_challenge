@@ -117,4 +117,11 @@ class TestSpheres < Minitest::Test
     n = s.normal_at(Point(0, 2 / Math.sqrt(2), -2 / Math.sqrt(2)))
     assert_equal n, Vector(0, 0.97014, -0.24254)
   end
+
+  def test_helper_for_producing_a_sphere_with_a_glassy_material
+    s = glass_sphere()
+    assert_equal s.transform, Matrix.identity
+    assert_equal s.material.transparency, 1.0
+    assert_equal s.material.refractive_index, 1.5
+  end
 end

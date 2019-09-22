@@ -9,12 +9,6 @@ require_relative '../lib/matrix'
 require_relative '../lib/transformation'
 
 class TestPatterns < Minitest::Test
-  class TestPattern < Pattern
-    def pattern_at(point)
-      Colour(point.x, point.y, point.z)
-    end
-  end
-
   def test_default_pattern_transformation
     pattern = TestPattern.new
     assert_equal pattern.transform, Matrix.identity(4)

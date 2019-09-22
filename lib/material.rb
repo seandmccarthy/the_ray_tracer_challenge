@@ -1,8 +1,10 @@
 class Material
-  attr_accessor :colour, :ambient, :diffuse, :specular, :shininess, :reflective, :pattern
+  attr_accessor :colour, :ambient, :diffuse, :specular, :shininess, :reflective,
+    :pattern, :transparency, :refractive_index
 
   def initialize(colour: Colour(1, 1, 1), ambient: 0.1, diffuse: 0.9,
-                 specular: 0.9, shininess: 200, reflective: 0.0, pattern: nil)
+                 specular: 0.9, shininess: 200, reflective: 0.0, pattern: nil,
+                 transparency: 0.0, refractive_index: 1.0)
     @colour = colour
     @ambient = ambient
     @diffuse = diffuse
@@ -10,6 +12,8 @@ class Material
     @shininess = shininess
     @reflective = reflective
     @pattern = pattern
+    @transparency = transparency
+    @refractive_index = refractive_index
   end
 
   def lighting(object:, light:, point:, eye_vector:, normal_vector:, in_shadow: false)

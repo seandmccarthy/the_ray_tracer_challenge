@@ -11,3 +11,9 @@ class Pattern
     pattern_at(pattern_point)
   end
 end
+
+class TestPattern < Pattern
+  def pattern_at(point)
+    Colour(point.x, point.y, point.z)
+  end
+end

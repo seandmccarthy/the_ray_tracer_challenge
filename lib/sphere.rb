@@ -36,8 +36,8 @@ class Sphere < Shape
   end
 end
 
-def Sphere(*args)
-  Sphere.new(*args)
+def Sphere(**args)
+  Sphere.new(**args)
 end
 
 def glass_sphere

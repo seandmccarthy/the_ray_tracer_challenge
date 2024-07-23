@@ -10,6 +10,6 @@ class Plane < Shape
   end
 end
 
-def Plane(*args)
-  Plane.new(*args)
+def Plane(**args)
+  Plane.new(**args)
 end

@@ -13,6 +13,6 @@ class StripePattern < Pattern
   end
 end
 
-def StripePattern(*args)
-  StripePattern.new(*args)
+def StripePattern(**args)
+  StripePattern.new(**args)
 end

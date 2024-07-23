@@ -17,6 +17,6 @@ class BlendedPattern < Pattern
   end
 end
 
-def BlendedPattern(*args)
-  BlendedPattern.new(*args)
+def BlendedPattern(**args)
+  BlendedPattern.new(**args)
 end

@@ -13,6 +13,6 @@ class RingPattern < Pattern
   end
 end
 
-def RingPattern(*args)
-  RingPattern.new(*args)
+def RingPattern(**args)
+  RingPattern.new(**args)
 end

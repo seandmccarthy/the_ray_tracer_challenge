@@ -1,3 +1,5 @@
+require 'stringio'
+
 def Canvas(width, height)
   Canvas.new(width, height)
 end

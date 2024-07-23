@@ -55,6 +55,6 @@ class Material
   end
 end
 
-def Material(*args)
-  Material.new(*args)
+def Material(**args)
+  Material.new(**args)
 end

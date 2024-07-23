@@ -15,6 +15,6 @@ class GradientPattern < Pattern
   end
 end
 
-def GradientPattern(*args)
-  GradientPattern.new(*args)
+def GradientPattern(**args)
+  GradientPattern.new(**args)
 end

@@ -13,6 +13,6 @@ class CheckerPattern < Pattern
   end
 end
 
-def CheckerPattern(*args)
-  CheckerPattern.new(*args)
+def CheckerPattern(**args)
+  CheckerPattern.new(**args)
 end
